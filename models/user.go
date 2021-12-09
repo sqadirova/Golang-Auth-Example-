@@ -23,7 +23,7 @@ func VerifyPassword(password, hashedPassword string) error {
 func (u *User) SaveUser() (*User, error) {
 
 	var err error
-	err = DB.Create(&u).Error
+	err = DB.Debug().Model(&User{}).Create(&u).Error
 	if err != nil {
 		return &User{}, err
 	}
@@ -62,13 +62,13 @@ func LoginCheck(username string, password string) (string, error) {
 		return "", err
 	}
 
-	token, err := token.GenerateToken(u.ID)
+	token_, err := token.GenerateToken(u.ID)
 
 	if err != nil {
 		return "", err
 	}
 
-	return token, nil
+	return token_, nil
 }
 
 func GetUserByID(uid uint) (User, error) {
